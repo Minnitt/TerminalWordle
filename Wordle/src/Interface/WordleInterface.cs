@@ -3,15 +3,14 @@
 using System.IO;
 using System;
 
-public struct Cell(int rowIndex, int colIndex, string letter)
+public struct Cell(string letter)
 {
-    public int rowIndex = rowIndex;
-    public int colIndex = colIndex;
     public string letter = letter;
 }
 public class WordleInterface
 {  
     private Cell[,] _cells;
+    
     public void Display()
     {
         Console.Clear();
@@ -31,6 +30,14 @@ public class WordleInterface
         {
             Console.WriteLine("File Not Found");
             return;
+        }
+
+        for (int i = 0; i < _cells.GetLength(0); i++)
+        {
+            for (int j = 0; j < _cells.GetLength(1); j++)
+            {
+                _cells[i, j] = new Cell(emptyCell);
+            }
         }
         
         for (int row = 0; row < 24; row += 4)
