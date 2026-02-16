@@ -1,3 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-Console.WriteLine("Hello, World!");
+using Wordle.Interface;
+
+WordleInterface game = new WordleInterface(); 
+game.Display();
+
