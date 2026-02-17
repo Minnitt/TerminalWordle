@@ -45,6 +45,14 @@ public class WordleGame
 
     private LetterContainer[] attempt(string guess)
     {
+
+        guess = guess.ToLower();
+        guess = guess.Replace(" ", "");
+        if (guess.Length != 5)
+        {
+            Console.WriteLine("Guess needs to be 5 letters long.");
+            return [];
+        }
         Dictionary<char, int> freqDist =  new Dictionary<char, int>();
         LetterContainer[] returnWord = new LetterContainer[guess.Length];
         foreach (char letter in targetWord)
