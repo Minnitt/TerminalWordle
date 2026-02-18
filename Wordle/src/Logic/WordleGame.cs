@@ -2,16 +2,16 @@
 
 public enum LetterColour
 {
-    GRAY,
-    YELLOW,
-    GREEN,
-    UNKNOWN
+    Gray,
+    Yellow,
+    Green,
+    Unknown
 }
 
 public struct LetterContainer(char letter, LetterColour colour)
 {
-    public char letter = letter;
-    public LetterColour colour = colour;
+    public char Letter = letter;
+    public LetterColour Colour = colour;
 }
 
 public class WordleGame
@@ -43,18 +43,23 @@ public class WordleGame
         return validWordList[random.Next(0, validWordList.Length)];
     }
 
-    private LetterContainer[] attempt(string guess)
+    public LetterContainer[] Attempt(string guess)
     {
-
         guess = guess.ToLower();
         guess = guess.Replace(" ", "");
         if (guess.Length != 5)
         {
-            Console.WriteLine("Guess needs to be 5 letters long.");
+            Console.WriteLine("Word needs to be 5 letters long.");
             return [];
         }
-        Dictionary<char, int> freqDist =  new Dictionary<char, int>();
-        LetterContainer[] returnWord = new LetterContainer[guess.Length];
+
+        if (!totalWordList.Contains(guess))
+        {
+            Console.WriteLine("Word is not a valid guess.");
+        }
+        
+        var freqDist =  new Dictionary<char, int>();
+        var returnWord = new LetterContainer[guess.Length];
         foreach (char letter in targetWord)
         {
             freqDist[letter]++;
@@ -63,16 +68,16 @@ public class WordleGame
         for (int i = 0; i < returnWord.Length; i++)
         {
             char letter = guess[i];
-            returnWord[i].letter = letter;
+            returnWord[i].Letter = letter;
             
             if (letter == targetWord[i]) {
-                returnWord[i].colour = LetterColour.GREEN;
+                returnWord[i].Colour = LetterColour.Green;
                 freqDist[letter]--;
             } else if (freqDist[letter] > 0) {
-                returnWord[i].colour = LetterColour.YELLOW;
+                returnWord[i].Colour = LetterColour.Yellow;
                 freqDist[letter]--;
             } else {
-                returnWord[i].colour = LetterColour.GRAY;
+                returnWord[i].Colour = LetterColour.Gray;
             }
             
             wordleGame[currentAttemptCount, i] = returnWord[i];
