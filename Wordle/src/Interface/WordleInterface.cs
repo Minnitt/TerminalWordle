@@ -35,7 +35,7 @@ public class WordleInterface
     private int width;
     private int horizontalPadding;
     private int verticalPadding;
-    private string emptyCell;
+    private readonly string _emptyCell;
     
     public void InitialiseDisplay()
     {
@@ -49,7 +49,7 @@ public class WordleInterface
         {
             for (int j = 0; j < _cells.GetLength(1); j++)
             {
-                _cells[i, j] = new Cell(emptyCell, i, j);
+                _cells[i, j] = new Cell(_emptyCell, i, j);
             }
         }
         
@@ -57,24 +57,31 @@ public class WordleInterface
         {
             for (int col = 0; col < 5; col += 1)
             {
-                PrintLetterCell(emptyCell, (row*4)+verticalPadding, (col*8)+horizontalPadding);
+                PrintLetterCell(_emptyCell, (row*4)+verticalPadding, (col*8)+horizontalPadding);
             }
         }
         
     }
 
-    public void SubscribeToCell(Cell cell)
+    private void SubscribeToCell(Cell cell)
     {
         cell.CellChanged += HandleLetterUpdate;
     }
 
-    private void HandleLetterUpdate(Object sender, EventArgs e)
+    private void HandleLetterUpdate(object? sender, EventArgs e)
     {
-        Cell cell = (Cell)sender;
-        PrintLetterCell(cell.LetterSprite, cell.Row, cell.Col);
+        if (sender is Cell cell)
+        {
+            PrintLetterCell(cell.LetterSprite, cell.Row, cell.Col);
+        }
+        else
+        {
+            Console.WriteLine("Failed to print cell");
+        }
+            
     }
 
-    public void PrintLetterCell(string letter, int row, int col)
+    private void PrintLetterCell(string letter, int row, int col)
     {
         Console.SetCursorPosition(col, row);
         string[] lines = letter.Split('\n');
@@ -92,7 +99,7 @@ public class WordleInterface
         width = Console.WindowWidth;
         horizontalPadding = (width - 40) / 2;
         verticalPadding = (height - 24) / 2;
-        emptyCell = "\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\n\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;8;8;8m▀\e[0m\e[38;2;8;8;8;48;2;0;0;0m▀\e[0m\e[38;2;8;8;8;48;2;8;8;8m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\n\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;21;21;21m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\n\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\n";
+        _emptyCell = "\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\n\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;8;8;8m▀\e[0m\e[38;2;8;8;8;48;2;0;0;0m▀\e[0m\e[38;2;8;8;8;48;2;8;8;8m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\n\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;21;21;21m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\n\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\n";
         foreach (Cell cell in _cells)
         {
             SubscribeToCell(cell);
