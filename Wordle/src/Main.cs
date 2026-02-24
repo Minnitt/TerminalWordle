@@ -3,5 +3,5 @@
 using Wordle.Interface;
 
 WordleInterface game = new WordleInterface(); 
-game.Display();
+game.InitialiseDisplay();
 
