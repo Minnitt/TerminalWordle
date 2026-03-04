@@ -6,13 +6,12 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+    
 
     <ItemGroup>
-      <PackageReference Include="Vortice.DXGI" Version="3.8.2" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="resources\letters\" />
+      <None Include="resources\**\*.*">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
