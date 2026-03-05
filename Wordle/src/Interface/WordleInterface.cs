@@ -1,6 +1,7 @@
 ﻿namespace Wordle.Interface;
 
 using Logic;
+using System.IO;
 using System;
 
 public class Cell
@@ -191,8 +192,8 @@ public class WordleInterface
             messageAsList[^1] = subString1;
             messageAsList.Add(subString2);
         }
-        //redo ts and also add check to see if the message will overflow off the screen
-        if (CurrentlyPrintedMessage != "")
+        
+        if (string.IsNullOrEmpty(CurrentlyPrintedMessage))
         {
             for (int i = 0; i < height - yOffset; i++)
             {
@@ -213,13 +214,9 @@ public class WordleInterface
                 Console.SetCursorPosition(padding, yOffset + i);
                 Console.Write(messageAsList[i]);
             }
-            
         }
-        
-        //splice the string at the line length cap and then walk backwards until you find a space. then turn the string into 2 substrings. check if the next string is shorter than the line length cap. if yes repeat until you have a list of strings, all to be printed on their own separate lines
-        
-
     }
+    
     private bool IsInAlphabet(string input)
     {
         if (string.IsNullOrEmpty(input))
@@ -238,12 +235,38 @@ public class WordleInterface
 
     private string GetLetterSprite(string letter, LetterColour colour)
     {
-        return "";
+        string filename = Path.Combine("resources", "letters");
+        
+        switch (colour)
+        {
+            case LetterColour.Black:
+                Path.Combine(filename, "black_");
+                break;
+            case LetterColour.Gray:
+                Path.Combine(filename, "gray_");
+                break;
+            case LetterColour.Green:
+                Path.Combine(filename, "green_");
+                break;
+            case LetterColour.Yellow:
+                Path.Combine(filename, "yellow_");
+                break;
+        }
+
+        if (letter.Length != 1)
+        {
+            CurrentlyPrintedMessage = "Letter in GetLetterSprite() is not 1 char.";
+        }
+
+        letter = letter.ToLower();
+        letter = letter.Trim();
+        Path.Combine(filename, letter, ".txt");
+        return ReadFile(filename);
     }
 
     private string ReadFile(string filename)
     {
-        return "";
+        return File.ReadAllText(filename);
     }
     
     public WordleInterface()
