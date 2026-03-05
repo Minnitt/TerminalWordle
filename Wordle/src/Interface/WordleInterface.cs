@@ -1,9 +1,6 @@
-﻿using System.Text;
+﻿namespace Wordle.Interface;
 
-namespace Wordle.Interface;
-
-using Wordle.Logic;
-using System.IO;
+using Logic;
 using System;
 
 public class Cell
@@ -40,10 +37,25 @@ public class WordleInterface
     private int verticalPadding;
     private readonly string _emptyCell;
     private int _currentCell;
+    public event EventHandler? _currentlyPrintedMessageChanged;
+
+    public string CurrentlyPrintedMessage
+    {
+        get;
+        set
+        {
+            field = value;
+            _currentlyPrintedMessageChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
     
     public void InitialiseDisplay()
     {
         Console.Clear();
+        if (height < 1 || width < 1)
+        {
+            PrintMessage("Window is too small. Please Resize");
+        }
 
         for (int i = 0; i < _cells.GetLength(0); i++)
         {
@@ -152,11 +164,16 @@ public class WordleInterface
         }
     }
 
+    private void HandlePrintMessageEvent(object? sender, EventArgs e)
+    {
+        PrintMessage(CurrentlyPrintedMessage);
+    }
     public void PrintMessage(string message)
     {
+        
         List<string> messageAsList = [message];
-        int yOffset = Console.BufferHeight - 2*verticalPadding / 3;
-        int lineLengthCap = Console.BufferWidth - horizontalPadding;
+        int yOffset = height - 2*verticalPadding / 3;
+        int lineLengthCap = width - horizontalPadding;
         while (messageAsList[^1].Length > lineLengthCap)
         {
             string uncutMessage = messageAsList[^1];
@@ -175,6 +192,16 @@ public class WordleInterface
             messageAsList.Add(subString2);
         }
         //redo ts and also add check to see if the message will overflow off the screen
+        if (CurrentlyPrintedMessage != "")
+        {
+            for (int i = 0; i < height - yOffset; i++)
+            {
+                int padding = (width - lineLengthCap) / 2;
+                string whiteSpace = new string(' ', lineLengthCap);
+                Console.SetCursorPosition(padding, yOffset + i);
+                Console.Write(whiteSpace);
+            }
+        }
 
         for (int i = 0; i < messageAsList.Count; i++)
         {
@@ -229,6 +256,7 @@ public class WordleInterface
         horizontalPadding = (width - 40) / 2;
         verticalPadding = (height - 24) / 2;
         _emptyCell = "\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\n\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;8;8;8m▀\e[0m\e[38;2;8;8;8;48;2;0;0;0m▀\e[0m\e[38;2;8;8;8;48;2;8;8;8m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\n\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;21;21;21m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\n\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\n";
-        
+        _currentlyPrintedMessageChanged += HandlePrintMessageEvent;
+
     }   
 }
