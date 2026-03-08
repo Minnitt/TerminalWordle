@@ -9,9 +9,9 @@ public enum LetterColour
     Unknown
 }
 
-public struct LetterContainer(char letter, LetterColour colour)
+public struct LetterContainer(string letter, LetterColour colour)
 {
-    public char Letter = letter;
+    public string Letter = letter;
     public LetterColour Colour = colour;
 }
 
@@ -59,19 +59,19 @@ public class WordleGame
             Console.WriteLine("Word is not a valid guess.");
         }
         
-        var freqDist =  new Dictionary<char, int>();
+        var freqDist =  new Dictionary<string, int>();
         var returnWord = new LetterContainer[guess.Length];
         foreach (char letter in targetWord)
         {
-            freqDist[letter]++;
+            freqDist[letter.ToString()]++;
         }
 
         for (int i = 0; i < returnWord.Length; i++)
         {
-            char letter = guess[i];
+            string letter = guess[i].ToString();
             returnWord[i].Letter = letter;
             
-            if (letter == targetWord[i]) {
+            if (letter == targetWord[i].ToString()) {
                 returnWord[i].Colour = LetterColour.Green;
                 freqDist[letter]--;
             } else if (freqDist[letter] > 0) {
