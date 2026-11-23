@@ -8,7 +8,6 @@ public class WordleGrid
     private const int GridWidth = 40;
     private const int GridHeight = 24;
     private const string EmptyCell = "\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\n\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;8;8;8m▀\e[0m\e[38;2;8;8;8;48;2;0;0;0m▀\e[0m\e[38;2;8;8;8;48;2;8;8;8m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\n\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;21;21;21m▀\e[0m\e[38;2;8;8;8;48;2;21;21;21m▀\e[0m\e[38;2;21;21;21;48;2;21;21;21m▀\e[0m\e[38;2;37;37;37;48;2;37;37;37m▀\e[0m\n\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\e[38;2;37;37;37m▀\e[0m\n";
-    private TerminalWindow _window;
     private float _leftPadding;
     private float _topPadding;
     private float _rightPadding;
@@ -16,10 +15,10 @@ public class WordleGrid
 
     public WordleGrid()
     {
-        _window = new TerminalWindow();
-        _window.resizeWatcher.OnResize += HandleResizeWatcher;
-        _window.resizeWatcher.OnSizeRestored += HandleResizeWatcher;
-        _window.resizeWatcher.OnTooSmall += HandleResizeWatcher;
+        var window = new TerminalWindow();
+        window.resizeWatcher.OnResize += HandleResizeWatcher;
+        window.resizeWatcher.OnSizeRestored += HandleResizeWatcher;
+        window.resizeWatcher.OnTooSmall += HandleResizeWatcher;
     }
 
     private void HandleResizeWatcher(object? sender, EventArgs e)
@@ -52,21 +51,13 @@ public class WordleGrid
 
     private void PrintLetterGrid(LetterContainer[,] grid)
     {
-        try
+        if (grid.GetLength(0) > 4)
         {
-            if (grid.GetLength(0) > 4)
-            {
-                throw new  ArgumentOutOfRangeException(nameof(grid), grid.GetLength(0), "Too many columns");
-            }
-            else if (grid.GetLength(0) < 0)
-            {
-                throw new  ArgumentOutOfRangeException(nameof(grid), grid.GetLength(0), "Too many rows");
-            }
+            throw new  ArgumentOutOfRangeException(nameof(grid), grid.GetLength(0), "Too many columns");
         }
-        catch (Exception e)
+        if (grid.GetLength(0) < 0)
         {
-            Console.WriteLine(e);
-            throw;
+            throw new  ArgumentOutOfRangeException(nameof(grid), grid.GetLength(0), "Too many rows");
         }
     }
 

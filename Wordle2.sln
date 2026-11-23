@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wordle but i actually try", "Wordle but i actually try\Wordle but i actually try.csproj", "{4D13D21D-C979-4140-9677-4AE7243BA733}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wordle2", "Wordle2\Wordle2.csproj", "{4D13D21D-C979-4140-9677-4AE7243BA733}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
